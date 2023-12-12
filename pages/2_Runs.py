@@ -4,13 +4,14 @@ import numpy as np
 from st_aggrid import AgGrid, GridOptionsBuilder, JsCode
 
 
-@st.cache
+@st.cache_data
 def load_runs():
     df = pd.read_csv("results.csv")
     df = df.drop("cm", axis=1)
-    dftrain = df[df.data=='train'].drop("data", axis=1)
-    dftest = df[df.data=='test'].drop("data", axis=1)
+    dftrain = df[df.data == 'train'].drop("data", axis=1)
+    dftest = df[df.data == 'test'].drop("data", axis=1)
     return dftrain, dftest
+
 
 st.title('Compare Runs of Experiment')
 
@@ -22,20 +23,20 @@ data_train, data_test = load_runs()
 data_load_state.text('Loading data...done!')
 
 tab_test, tab_train = st.tabs(['Test', 'Train'])
-#tab_train, tab_test = st.tabs(['Train', 'Test'])
+# tab_train, tab_test = st.tabs(['Train', 'Test'])
 
-
-
+# old
 with tab_test:
     dtr4 = data_test.round(4)
     st.header("Test")
     gb = GridOptionsBuilder.from_dataframe(dtr4)
     gb.configure_column("run_id",
-                        cellRenderer=JsCode('''function(params) {return '<a target="_blank" href="/Model_Details?option='+params.value+'">'+params.value+'</a>'}'''),
+                        cellRenderer=JsCode(
+                            '''function(params) {return '<a target="_blank" href="/Model_Details?option='+params.value+'">'+params.value+'</a>'}'''),
                         width=300)
     grid_options = gb.build()
-    a1 = AgGrid(dtr4, grid_options, allow_unsafe_jscode=True, theme="streamlit",  columns_auto_size_mode=2) 
-    #, fit_columns_on_grid_load=True)
+    a1 = AgGrid(dtr4, grid_options, allow_unsafe_jscode=True, unsafe_allow_html=True, theme="streamlit", columns_auto_size_mode=2
+    , fit_columns_on_grid_load=True)
 
 
 with tab_train:
@@ -43,7 +44,8 @@ with tab_train:
     st.header("Train")
     gbt = GridOptionsBuilder.from_dataframe(dte4)
     gbt.configure_column("run_id",
-                        cellRenderer=JsCode('''function(params) {return '<a target="_blank" href="/Model_Details?option='+params.value+'">'+params.value+'</a>'}'''),
-                        width=300)
+                         cellRenderer=JsCode(
+                             '''function(params) {return '<a target="_blank" href="/Model_Details?option='+params.value+'">'+params.value+'</a>'}'''),
+                         width=300)
     grid_optionst = gbt.build()
-    a2 = AgGrid(dte4, grid_optionst, allow_unsafe_jscode=True, theme="streamlit",  columns_auto_size_mode=1)
+    a2 = AgGrid(dte4, grid_optionst, allow_unsafe_jscode=True,unsafe_allow_html=True, theme="streamlit", columns_auto_size_mode=1)

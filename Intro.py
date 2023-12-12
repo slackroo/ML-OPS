@@ -1,6 +1,7 @@
 import streamlit as st
 
 st.set_page_config(
+    layout="wide",
     page_title="Model for Heart Disease Analysis",
     page_icon="👋",
     # menu_items={

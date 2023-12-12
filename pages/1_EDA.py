@@ -1,17 +1,18 @@
 import pandas as pd
 import numpy as np
-import pandas_profiling
+from ydata_profiling import ProfileReport
+from ydata_profiling.utils.cache import cache_file
 import streamlit as st
 from streamlit_pandas_profiling import st_profile_report
 
 
-@st.cache
+@st.cache_data
 def load_runs():
     dftrain = pd.read_csv("data/heart.csv")
     return dftrain
 
 def return_report(df):
-    return df.profile_report()
+    return ProfileReport(df,title='report')
 
 st.title('EDA')
 
